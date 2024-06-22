@@ -6,15 +6,15 @@ from txtai.embeddings import Embeddings
 from txtai.pipeline import Caption
 
 def images():
-  for path in glob.glob('images/*png'):
-    # Add image object along with image metadata
-    image = Image.open(path)
-    print(path)
-    yield (path, {"object": image, "format": image.format, "width": image.width, "height": image.height}, None)
+    for path in glob.glob('images/*png'):
+        image = Image.open(path)
+        yield (path, {"object": image, "format": image.format, "width": image.width, "height": image.height})
 
 embeddings = Embeddings({"method": "sentence-transformers", "path": "sentence-transformers/clip-ViT-B-32", "content": True, "objects": "image"})
 embeddings.index(images())
+print(embeddings.count())
 print(embeddings.search("select id, object, format, width, height from images"))
+#print(embeddings.load(embeddings.search("select id, object, format, width, height from images")[0]['id']))
 
 images, labels = [], []
 for query in ["Microsoft Profits", "Google Net Income Report", "Nvidia lastest earnings"]:
