@@ -1,7 +1,9 @@
 import requests
 import json
 
-def get_financial_data(api_key, symbol, period='annual', limit=50):
+api_key = 'TImFCmFei1Oo7dISNpGsNWu78WGgIv6L'
+
+def get_financial_data(symbol, period='annual', limit=50):
     """
     Fetches the financial statement data for a given company symbol.
 
@@ -21,11 +23,10 @@ def get_financial_data(api_key, symbol, period='annual', limit=50):
 
 if __name__ == "__main__":
     # Replace 'your_api_key' with your actual API key
-    api_key = 'TImFCmFei1Oo7dISNpGsNWu78WGgIv6L'
     company_symbol = 'AAPL'  # Replace with any company's stock symbol you want to fetch data for
 
     try:
-        financial_data = get_financial_data(api_key, company_symbol)
+        financial_data = get_financial_data(company_symbol)
         print(json.dumps(financial_data, indent=4))
     except requests.exceptions.HTTPError as http_err:
         print(f'HTTP error occurred: {http_err}')
