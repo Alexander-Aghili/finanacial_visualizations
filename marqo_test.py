@@ -3,23 +3,23 @@ import glob
 import pprint
 
 mq = marqo.Client(url='http://localhost:8882')
-
+"""
 mq.index("images-index").delete()
 mq.create_index(
         "images-index",
         treat_urls_and_pointers_as_images=True,
         model="open_clip/ViT-B-32/laion2b_s34b_b79k",
 )
-
+"""
 images = []
 for path in glob.glob('images/*png'):
-    images.append({"Title": path, "image": "http://host.docker.internal:8222/" + path})
+    images.append({"Title": path.replace(".png","").replace("/", " "), "image": "http://host.docker.internal:8222/" + path})
     
 print(images)
 
 
-mq.index("images-index").add_documents(
-        images,
+res = mq.index("images-index").add_documents(
+        documents=images,
         mappings={
             "images": {
                 "type": "multimodal_combination",
@@ -29,11 +29,13 @@ mq.index("images-index").add_documents(
                 }
             }
         },
-        tensor_fields=["captioned_image"]
+        tensor_fields=["images"]
 )
 
+print(res)
+print(mq.index("images-index").get_stats())
 results = mq.index("images-index").search(
-    q="Nividia's lastest earnings"
+    q="Google"
 )
 
 pprint.pprint(results)
